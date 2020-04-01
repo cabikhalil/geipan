@@ -19,7 +19,7 @@
 				<p>
 				<li><a href="/api/cases?page=2&pagesize=20">Requête avec pagination, on indique la page (2) et le nombre de cases par page (20)</a>. Ici un GET sur <code>/api/cases?page=2&pagesize=20</code></li>
 				<p>
-				<li><a href="/api/cases/5e30625f5caa25eeee7e3fca">Requête pour obtenir le détail du case avec id=5e30625f5caa25eeee7e3fca</a>. Ici un GET sur <code>/api/cases/2</code></li>
+				<li><a href="/api/cases/2">Requête pour obtenir le détail du case avec id=2</a>. Ici un GET sur <code>/api/cases/2</code></li>
 			</ul>
 			<p>Pour tester avec Ajax, il faut du JavaScript. On utilise la nouvelle API fetch, disponible depuis 2012. Mais avec un polyfill on peut la faire fonctionner sur tous les navigateurs, même les plus anciens.<p>
 			<p><strong>Réponse Ajax du serveur:</strong></p>
@@ -62,8 +62,8 @@
 				<fieldset>
 					<legend>Modification d'un case</legend>
 					<label>
-						Id: <input type="text" name="_id"
-						value="5e30625f5caa25eeee7e3fca" required placeholder="Id du case à modifier">
+						Id: <input type="text" name="id_cas"
+						value="2" required placeholder="Id du case à modifier">
 					</label>
 					<p></p>
 					<label>
@@ -87,11 +87,99 @@
 				<fieldset>
 					<legend>Suppression d'un case</legend>
 					<label>
-						Id: <input type="text" name="_id"
-						value="5e30625f5caa25eeee7e3fca" required placeholder="Id du case à supprimer">
+						Id: <input type="text" name="id_cas"
+						value="2" required placeholder="Id du case à supprimer">
 					</label>
 
 					<button>Supprimer ce case</button>
+				</fieldset>
+			</form>
+
+
+			<h1>Test de l'API sur le serveur de testimonials</h1>
+		<h2>HTTP GET pour obtenir des testimonials, ou un seul<h2>
+			<h3>GET /api/testimonials</h3>
+			<p>Pour tester sans Ajax, on peut juste faire un lien HTML:</p>
+			<ul>
+				<li><a href="/api/testimonials">Cliquer pour obtenir les 10 premiers testimonials</a>. La requête est simplement un GET sur <code>/api/testimonials</code></li>
+				<p>
+				<li><a href="/api/testimonials?page=2">Requête avec pagination, on indique la page (par defaut: 10 cases par page)</a>. Ici un GET sur <code>/api/testimonials?page=2</code></li>
+				<p>
+				<li><a href="/api/testimonials?page=2&pagesize=20">Requête avec pagination, on indique la page (2) et le nombre de testimonials par page (20)</a>. Ici un GET sur <code>/api/testimonials?page=2&pagesize=20</code></li>
+				<p>
+				<li><a href="/api/testimonials/31">Requête pour obtenir le détail du testimonial avec id=31</a>. Ici un GET sur <code>/api/testimonials/31</code></li>
+			</ul>
+			<p>Pour tester avec Ajax, il faut du JavaScript. On utilise la nouvelle API fetch, disponible depuis 2012. Mais avec un polyfill on peut la faire fonctionner sur tous les navigateurs, même les plus anciens.<p>
+			<p><strong>Réponse Ajax du serveur:</strong></p>
+			<div id="reponseGET" class="response"></div>
+
+			<ul>
+				<li>GET en fetch/Ajax correspondant à la première requête de l'exemple précédent: <button onclick="getRequest1();">Clicker</button></li>
+				<p></p>
+				<li>GET en fetch/Ajax correspondant à la seconde requête de l'exemple précédent: <button onclick="getRequest2();">Clicker</button></li>
+				<p></p>
+				<li>GET en fetch/Ajax correspondant à la troisème requête de l'exemple précédent: <button onclick="getRequest3();">Clicker</button></li>
+				<p></p>
+				<li>GET en fetch/Ajax correspondant à la quatrième requête de l'exemple précédent: <button onclick="getRequest4();">Clicker</button></li>
+			</ul>
+			<h2>HTTP POST pour insérer un testimonial</h2>
+			<p>Avec fetch/Ajax POST<p>
+			<p><strong>Réponse Ajax du serveur:</strong></p>
+			<div id="reponsePOST" class="response"></div>
+			<form onsubmit="postRequest(event);">
+				<fieldset>
+					<legend>Ajout d'un testimonial</legend>
+					<label>
+						Nom: <input type="text" name="nom"
+						value="MARIGOT (LE) (972) --.--.1937" required placeholder="MARIGOT's testimonial">
+					</label>
+					<p></p>
+					<label>
+						Zone: <input type="text" name="genre" value="H" required placeholder="genre testimonial">
+					</label>
+					<p></p>
+					<button>Ajouter ce testimonial</button>
+				</fieldset>
+			</form>
+
+			<h2>HTTP PUT pour modifier un testimonial</h2>
+			<p>Avec fetch/Ajax PUT<p>
+			<p><strong>Réponse Ajax du serveur:</strong></p>
+			<div id="reponsePUT" class="response"></div>
+			<form id="formulaireModification" onsubmit="putRequest(event);">
+				<fieldset>
+					<legend>Modification d'un testimonial</legend>
+					<label>
+						Id: <input type="text" name="id_temoignage"
+						value="2" required placeholder="Id du testimonial à modifier">
+					</label>
+					<p></p>
+					<label>
+						Nom: <input type="text" name="nom"
+						value="MARIGOT (LE) (972) --.--.1937" required placeholder="MARIGOT's testimonial">
+					</label>
+					<p></p>
+					<label>
+						Zone: <input type="text" name="genre" value="H" required placeholder="genre testimonial">
+					</label>
+					<p></p>
+					<button>Modifier ce testimonial</button>
+				</fieldset>
+			</form>
+
+			<h2>HTTP DELETE pour Supprimer un testimonial</h2>
+			<p>Avec fetch/Ajax DELETE<p>
+			<p><strong>Réponse Ajax du serveur:</strong></p>
+			<div id="reponseDELETE" class="response"></div>
+			<form onsubmit="deleteRequest(event);">
+				<fieldset>
+					<legend>Suppression d'un testimonial</legend>
+					<label>
+						Id: <input type="text" name="id_temoignage"
+						value="2" required placeholder="Id du testimonial à supprimer">
+					</label>
+
+					<button>Supprimer ce testimonial</button>
 				</fieldset>
 			</form>
 	</body>
