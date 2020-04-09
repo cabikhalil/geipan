@@ -31,11 +31,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Lance le serveur avec express
-server.listen(port);
-
-console.log("Serveur lancé sur le port : " + port);
-
 //------------------
 // ROUTES
 //------------------
@@ -171,6 +166,14 @@ app.get('/api/testimonials/:id', function(req, res) {
  
 });
 
+app.get('/api/testimonials/byCase/:id', function(req,res){
+	var id= req.params.id;
+
+	mongoDBModule.findTestimonialByCasId(id,function(data){
+		res.send(JSON.stringify(data));
+	})
+})
+
 // Creation d'un testimonial par envoi d'un formulaire
 // On fera l'insert par un POST, c'est le standard REST
 app.post('/api/testimonials', multerData.fields([]), function(req, res) {
@@ -206,3 +209,7 @@ app.delete('/api/testimonials/:id', function(req, res) {
  	});
 })
 
+// Lance le serveur avec express
+server.listen(port);
+
+console.log("Serveur lancé sur le port : " + port);

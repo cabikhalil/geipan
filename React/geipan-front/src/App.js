@@ -4,6 +4,7 @@ import './App.css';
 import './components/Table.js';
 import Details from './components/Details.js';
 import Observation from './components/TableCas.js';
+import DetailsTemoignage from './components/DetailsTemoignage.js';
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
         <Switch>
           <Route path="/" exact component={Observation}></Route>
           <Route path="/cas/:_id" exact component={Details}></Route>
+          <Route path="/cas/temoignage/:id_temoignage" exact component={DetailsTemoignage}></Route>
         </Switch>
-        
+
       </header>
     </div>
     </Router>

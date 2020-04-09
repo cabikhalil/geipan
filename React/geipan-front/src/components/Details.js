@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -7,7 +8,8 @@ export default class Details extends Component {
     constructor(props) {
         super(props);
         this.state= {
-            case: []
+            case: [],
+            temoignages : []
         }
     }
 
@@ -31,6 +33,33 @@ export default class Details extends Component {
           console.log("Erreur dans le get: " + err)
         });
     }
+
+    getTemoignageByCasId(id) {
+        fetch('http://localhost:8080/api/testimonials/byCase/'+ id, {
+            method: 'get',
+        })
+            .then(response => {
+          return response.json();
+        })
+
+        .then(res => {  
+            let newTemoignage = [];
+            console.log(res.case)
+             res.case.forEach((el) => {
+              newTemoignage.push(el);
+            }); 
+            this.setState({
+              temoignages: newTemoignage
+            });
+            
+            //this.renderTemoignagesList()
+          })
+
+        .catch(err => {
+          console.log("Erreur dans le get: " + err)
+        });
+    }
+
 
     renderDetailsList() {
         let data = {
@@ -63,19 +92,64 @@ export default class Details extends Component {
         )
 }
 
+    renderTemoignagesList() {
+        let newTemoignagesList = []
+        this.state.case.map((el, index) => {
+            let data = {
+                id: el.id_temoignage
+            }
+            newTemoignagesList.push(data)
+            return newTemoignagesList
+        })
+         this.setState({
+             temoignages: newTemoignagesList
+         })
+         console.log(this.state.temoignages[0])
+    }
+
+    handleDetailsTemoignage(_id){
+       console.log("ana honnn handleDetailsTemoignage");
+
+       this.props.history.push("/temoignage/"+_id)
+        //this.props.history.push('/api/cases/' + _id);
+        /* fetch('http://localhost:8080/api/cases/' + _id, {
+            method: 'get',
+        })
+            .then(response => {
+          return response.json();
+        })
+        .then(res => {  
+            console.log(res.case);
+            return res.case;
+            }); */
+    }
 
     componentDidMount() {
         //console.log("ana honnn componentDidMount");
         //console.log(this);
+        console.log(this.state.temoignages.length)
         //this.getCasFromServer(JSON.stringify(queryString.parse(this.props.match.params.params)))
         this.getCasIDFromServer(this.props.match.params._id)
+        this.getTemoignageByCasId(this.props.match.params._id)
+        
     }
+
+    
     
     render() {
         const text = {
             color: 'black',
-            fontWeight: 'bold'
+            fontWeight: 'normal'
           }
+          
+        const linksTems = this.state.temoignages.map(function(tem){
+            return( 
+                    <Link to={'/cas/temoignage/'+tem.id_temoignage}>
+                    <p>Numéro {tem.id_temoignage} </p>
+                    </Link>
+                )
+          });
+
         return (
             <div>
                 <List>
@@ -103,12 +177,23 @@ export default class Details extends Component {
                     <ListItem>
                         <ListItemText style={text} primary="Nombre de témoins" secondary={this.state.case.nbTemoins}/>
                     </ListItem>
+                    <ListItem>
+                        <h5 style={text}>Témoignages :
+                            <li>
+                                {linksTems}
+                            </li>
 
-
+                        </h5>
+                        
+                    </ListItem>
                 </List>
+               
+                
+                
                 
             </div>
         );
+
                 }
 
 }

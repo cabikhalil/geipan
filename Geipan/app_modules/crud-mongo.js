@@ -22,16 +22,17 @@ exports.connexionMongo = function(callback) {
 exports.findCases = function(page, pagesize, callback) {
     MongoClient.connect(url, function(err, client) {
     	    console.log("pagesize = " + pagesize);
-			console.log("page = " + pagesize);
+			console.log("page = " + page);
 			
 			var db = client.db(dbName);
 
 			console.log("db " + db)
+
         if(!err){
 			db.collection('cas_pub')
 			.find()
             .skip(page*pagesize)
-            .limit(pagesize)
+           // .limit(pagesize)
             .toArray()
             .then(arr => callback(arr));
         }
@@ -235,10 +236,53 @@ exports.findTestimonialById = function(id, callback) {
         if(!err) {
         	// La requete mongoDB
 
-            let myquery = { "id_temoignage": id};
+            let myquery = { "id_temoignage": parseInt(id)};
 
             db.collection("temoignages_pub") 
             .findOne(myquery, function(err, data) {
+            	let reponse;
+
+                if(!err){
+                    reponse = {
+                    	succes: true,
+                        case : data,
+                        error : null,
+                        msg:"Details du temoignage envoyés"
+                    };
+                } else{
+                    reponse = {
+                    	succes: false,
+                        case : null,
+                        error : err,
+                        msg: "erreur lors du find"
+
+                    };
+                }
+                callback(reponse);
+            });
+        } else {
+        	let reponse = reponse = {
+                    	succes: false,
+                        case : null,
+                        error : err,
+                        msg: "erreur de connexion à la base"
+                    };
+            callback(reponse);
+        }
+    });
+}
+
+exports.findTestimonialByCasId = function(id, callback) {
+    MongoClient.connect(url, function(err, client) {
+		var db = client.db(dbName);
+        if(!err) {
+        	// La requete mongoDB
+
+            let myquery = { "id_cas": parseInt(id)};
+
+            /*db.collection("temoignages_pub") 
+			.find(myquery, function(err, data) {*/
+				db.collection("temoignages_pub").find(myquery).toArray(function (err, data) {
             	let reponse;
 
                 if(!err){
@@ -303,7 +347,7 @@ exports.createTestimonial = function(formData, callback) {
 		        callback(reponse);
 		    });
 		} else{
-			let reponse = reponse = {
+			let reponse = {
                     	succes: false,
                         error : err,
                         msg:"Problème lors de l'insertion, erreur de connexion."
