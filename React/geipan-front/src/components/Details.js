@@ -108,27 +108,11 @@ export default class Details extends Component {
     }
 
     handleDetailsTemoignage(_id){
-       console.log("ana honnn handleDetailsTemoignage");
-
-       this.props.history.push("/temoignage/"+_id)
-        //this.props.history.push('/api/cases/' + _id);
-        /* fetch('http://localhost:8080/api/cases/' + _id, {
-            method: 'get',
-        })
-            .then(response => {
-          return response.json();
-        })
-        .then(res => {  
-            console.log(res.case);
-            return res.case;
-            }); */
+       this.props.history.push("/cas/details/temoignage/"+_id)
     }
 
     componentDidMount() {
-        //console.log("ana honnn componentDidMount");
-        //console.log(this);
         console.log(this.state.temoignages.length)
-        //this.getCasFromServer(JSON.stringify(queryString.parse(this.props.match.params.params)))
         this.getCasIDFromServer(this.props.match.params._id)
         this.getTemoignageByCasId(this.props.match.params._id)
         
@@ -144,7 +128,7 @@ export default class Details extends Component {
           
         const linksTems = this.state.temoignages.map(function(tem){
             return( 
-                    <Link to={'/cas/temoignage/'+tem.id_temoignage}>
+                    <Link to={'/cas/details/temoignage/'+tem.id_temoignage}>
                     <p>Numéro {tem.id_temoignage} </p>
                     </Link>
                 )

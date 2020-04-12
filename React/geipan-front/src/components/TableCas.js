@@ -11,7 +11,6 @@ import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
 
-import queryString from 'query-string';
 
 
 export default class Observation extends Component {
@@ -116,26 +115,10 @@ export default class Observation extends Component {
     }
 
     handleDetailRow(_id){
-       console.log("ana honnn handleDetailRow");
-       console.log(_id)
-       console.log(this);
-       this.props.history.push("/cas/"+_id)
-        //this.props.history.push('/api/cases/' + _id);
-        /* fetch('http://localhost:8080/api/cases/' + _id, {
-            method: 'get',
-        })
-            .then(response => {
-          return response.json();
-        })
-        .then(res => {  
-            console.log(res.case);
-            return res.case;
-            }); */
+       this.props.history.push("/cas/details/"+_id)
+       
     }
     componentDidMount() {
-        //console.log("ana honnn componentDidMount");
-        //console.log(this);
-        //this.getCasFromServer(JSON.stringify(queryString.parse(this.props.match.params.params)))
         this.getCasFromServer()
     }
 
