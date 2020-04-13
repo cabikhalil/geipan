@@ -79,13 +79,22 @@ app.get('/api/connection', function(req, res) {
 // page = no de la page
 // Oui, on va faire de la pagination, pour afficher
 // par exemple les cases 10 par 10
-app.get('/api/cases', function(req, res) {
+app.get('/api/cases', function(req, res) { 
 	// Si présent on prend la valeur du param, sinon 1
     let page = parseInt(req.query.page || 1);
     // idem si present on prend la valeur, sinon 10
-    let pagesize = parseInt(req.query.pagesize || 10);
-
- 	mongoDBModule.findCases(page, pagesize, function(data) {
+	let pagesize = parseInt(req.query.pagesize || 10);
+	console.log("*****");
+	console.log(req.query);
+	console.log("*****");
+	let form = {
+		cas_date_start : new Date(req.query.cas_date_start),
+		cas_date_end : new Date(req.query.cas_date_end),
+		cas_classification : req.query.cas_classification,
+		cas_zone_nom : req.query.cas_zone_nom
+	}
+	console.log(form);
+ 	mongoDBModule.findCases(form,page, pagesize, function(data) {
  		var objdData = {
  			msg:"cases recherchés avec succès",
  			data: data

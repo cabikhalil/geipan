@@ -27,18 +27,18 @@ export default class Observation extends Component {
 
 
     getCasFromServer(form) {
-        console.log(form);
-        //fetch('http://localhost:8080/api/cases/'+form{
-        fetch('http://localhost:8080/api/cases/', {
+      console.log(form)
+      let url = 'http://localhost:8080/api/cases?' + (form)
+        fetch(url, {
             method: 'get',
         })
             .then(response => {
+              console.log(url)
           return response.json();
         })
 
         .then(res => {  
           let newCas = [];
-          console.log(this.props.match.params.params);
           console.log(res);
           res.data.forEach((el) => {
             newCas.push(el);
@@ -123,7 +123,7 @@ export default class Observation extends Component {
        
     }
     componentDidMount() {
-      this.getCasFromServer(JSON.stringify(queryString.parse(this.props.match.params.params)))
+      this.getCasFromServer(this.props.match.params.params)
     }
 
     render() {

@@ -19,7 +19,7 @@ exports.connexionMongo = function(callback) {
 	});
 }
 
-exports.findCases = function(page, pagesize, callback) {
+exports.findCases = function(form,page, pagesize, callback) {
     MongoClient.connect(url, function(err, client) {
     	    console.log("pagesize = " + pagesize);
 			console.log("page = " + page);
@@ -27,11 +27,60 @@ exports.findCases = function(page, pagesize, callback) {
 			var db = client.db(dbName);
 
 			console.log("db " + db)
+		if (form.cas_classification == "A"){
+			console.log("Classe A")
+		}
+		let finalquery = {};
+		if(form.cas_classification !== undefined) {
+			if (JSON.stringify(form.cas_classification).length>1){
+				let cas_classif= form.cas_classification.split(',');
+				let queryClasse = ""
+				queryClasse = cas_classif.length == 0?{$exist:true}:{$in:cas_classif};
+				 finalquery["cas_classification"]=queryClasse;
+				
+			} else {
+				finalquery["cas_classification"]=form.cas_classification;
+			}
+		}
+		
+		if(form.cas_zone_nom !== undefined) {
+			if (JSON.stringify(form.cas_zone_nom).includes(',')){
+				let cas_zone= form.cas_zone_nom.split(',');
+				let queryZone = ""
+				queryZone = cas_zone.length == 0?{$exist:true}:{$in:cas_zone};
+				finalquery["cas_zone_nom"]=queryZone;
+				
+			} else {
+				finalquery["cas_zone_nom"]=form.cas_zone_nom;
+			}
+		}
 
+		if(form.cas_date_start !== undefined && form.cas_date_end!== undefined){
+
+			let queryDatePeriod = ""
+			queryDatePeriod = (form.cas_date_end.length == 0 && form.cas_date_start.length == 0) ?{$exist:true}:{$gte:form.cas_date_start, $lte : form.cas_date_end};
+			finalquery["dateCas"]=queryDatePeriod;
+			
+		} else if (form.cas_date_start !== undefined) {
+			
+			let queryDateStart = ""
+			queryDateStart = (form.cas_date_start.length == 0) ?{$exist:true}:{$gte:form.cas_date_start};
+			finalquery["dateCas"]=queryDateStart;
+			
+		} else if (form.cas_date_end !== undefined) {
+			
+			let queryDateEnd = ""
+			queryDateEnd = (form.cas_date_end.length == 0) ?{$exist:true}:{$lte:form.cas_date_end};
+			finalquery["dateCas"]=queryDateEnd;
+		}
+		
         if(!err){
-			db.collection('cas_pub')
-			.find()
-            .skip(page*pagesize)
+			db.collection('cas_pub').aggregate(
+				[{$addFields: { dateCas : {$dateFromParts: { 'year' : {$convert:{input: "$cas_AAAA", to:"int", onError:1900}} , 'month' : {$convert:{input: "$cas_MM", to:"int", onError:01}}, 'day': {$convert:{input: "$cas_JJ", to:"int", onError:01}} }}}}, { $match : finalquery }, {$skip:page*pagesize} ]
+			)
+			//db.collection('cas_pub')
+			//.find(finalquery)
+            //.skip(page*pagesize)
            // .limit(pagesize)
             .toArray()
             .then(arr => callback(arr));
@@ -49,11 +98,11 @@ exports.findCaseById = function(id, callback) {
         	// La requete mongoDB
 
             let myquery = { "id_cas": parseInt(id)};
-			console.log("id: " + id);
+			console.log(id);
             db.collection("cas_pub") 
             .findOne(myquery, function(err, data) {
 				let reponse;
-				console.log("data: " + data);
+				console.log(data);
 
                 if(!err){
                     reponse = {

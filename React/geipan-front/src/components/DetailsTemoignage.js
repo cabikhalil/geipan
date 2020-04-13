@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
 
 export default class DetailsTemoignage extends Component{
     constructor(props) {
@@ -64,6 +65,10 @@ render() {
         fontWeight: 'bold'
       }
     return (
+        <Paper elevation={3} > 
+        <br/>
+        Détails du témoignage
+        <br/>
         <div>
             <List>
                 <ListItem>
@@ -83,6 +88,7 @@ render() {
             </List>
             
         </div>
+        </Paper>
     );
             }
 

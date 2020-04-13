@@ -1,11 +1,11 @@
-import { FormControl,TextField,Checkbox, InputLabel, Select,MenuItem, FormHelperText } from '@material-ui/core';
-import React, { Component } from 'react';
+import { FormControl,TextField, InputLabel, Select, Card, CardContent, CardHeader } from '@material-ui/core';
+import React, { Component, Fragment } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Form,Button,Badge,Container,Row,Col,Card } from 'react-bootstrap';
+import { Form,Button,Badge,Container,Row,Col } from 'react-bootstrap';
+import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 export default class FormGeipan extends Component{
 
@@ -61,11 +61,8 @@ export default class FormGeipan extends Component{
             Array.prototype.forEach.call(filters.classe,el =>
                 params += el + ","
                 )
-                params.slice(0,-1);
-        } else {
-            if (params !== "") params += "&"
-            params += "cas_classification=ALL";
-        }
+                params = params.slice(0,-1);
+        } 
 
         if (filters.localisation.length!== 0){
             if (params !== "") params += "&"
@@ -73,7 +70,7 @@ export default class FormGeipan extends Component{
             Array.prototype.forEach.call(filters.localisation,el =>
                 params += el + ","
                 )
-                params.slice(0,-1);
+                params = params.slice(0,-1);
         }
 
         this.props.history.push('/cas/' + params);
@@ -100,13 +97,6 @@ export default class FormGeipan extends Component{
 
     render() {
         
-        const useStyles = makeStyles((theme) => ({
-            formControl: {
-              margin: theme.spacing(1),
-              minWidth: 120,
-              maxWidth: 300,
-            }
-          }));
         const localisations= [
             "Martinique",
             "Vaucluse",
@@ -239,76 +229,92 @@ export default class FormGeipan extends Component{
     
         //const { cases : {classe, localisation, dateStart, dateEnd}} = this.state.cases;
         return(
-          <Form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <h2 variant="primary">Filtres</h2>
           <Card className="text-center">
-          <Card.Header>Date</Card.Header>
-          <Card.Body>
-            <Container> 
-            <Row>
-            <Col>
-              <Paper> Du 
-              <DatePicker
-              selected={this.state.startDate}
-              onChange={date => this.handleChangeStartDate(date)}
-              selectsStart
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-            /> </Paper>
-              
-            </Col>
-            <Col>
-            <Paper> Au  
-                <br/>
-              <DatePicker
-              selected={this.state.endDate}
-              onChange={date => this.handleChangeEndDate(date)}
-              selectsEnd
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-              minDate={this.state.startDate}
-            /></Paper>
+          <CardHeader>Date</CardHeader>
+          
+            <CardContent> 
             
-            </Col>
-            </Row>
-            </Container>
-            </Card.Body>
+              <Paper> 
+              
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  clearable
+                  label="Du"
+                  value={this.state.startDate}
+                  placeholder="10/10/2010"
+                  onChange={date => this.handleChangeStartDate(date)}
+                  format="MM/dd/yyyy"
+                />
+              </MuiPickersUtilsProvider>
+           
+            </Paper>
+              
+           
+            <Paper>  
+                
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  clearable
+                  label="Au"
+                  value={this.state.endDate}
+                  placeholder="10/10/2011"
+                  onChange={date => this.handleChangeEndDate(date)}
+                  format="MM/dd/yyyy"
+                />
+                </MuiPickersUtilsProvider>
+            </Paper>
+            
+            </CardContent>
+            
             </Card>
             <br/>
           <Card className="text-center">
-          <Card.Header>Localisation</Card.Header>
-          <Card.Body>
-          <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-            <Form.Control as="select" size="sm" custom onChange={this.handleChangeLocalisation} value={this.state.localisation}>
+          <CardHeader>Localisation</CardHeader>
+          <CardContent>
+            <FormControl >
+
+            <Select
+              multiple
+
+              value={this.state.localisation}
+              onChange={this.handleChangeLocalisation}
+            >
             {localisations.map((localisation) => (
             <option key={localisation} value={localisation}>
               {localisation}
             </option>
             ))}
-            </Form.Control>
-          </Form.Group>
-          </Card.Body>
+            </Select>
+            </FormControl>
+          
+          </CardContent>
           </Card>
 
           <Card className="text-center">
-          <Card.Header>Classe</Card.Header>
-          <Card.Body>
-          <Form.Group controlId="exampleForm.SelectCustomSizeLg">
-            <Form.Control as="select" size="lg" custom value={this.state.classe} onChange={this.handleChangeClasse}>
-            {classes.map((classe) => (
+          <CardHeader>Classe</CardHeader>
+          <CardContent>
+          <Select
+              multiple
+              value={this.state.classe}
+              onChange={this.handleChangeClasse}
+            >
+              {classes.map((classe) => (
             <option key={classe} value={classe}>
               {classe}
             </option>
             ))}
-            </Form.Control>
-          </Form.Group>
-          </Card.Body>
+
+            </Select>
+           
+          </CardContent>
           </Card>
           <br/>
           <Button variant="primary" type="submit">
             Submit
           </Button>
-        </Form>
+        </form>
         
         )
     }
