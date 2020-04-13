@@ -73,7 +73,7 @@ export default class FormGeipan extends Component{
                 params = params.slice(0,-1);
         }
 
-        this.props.history.push('/cas/' + params);
+        this.props.history.push('/filteredcas/' + params);
       }
  
 
@@ -232,7 +232,7 @@ export default class FormGeipan extends Component{
           <form onSubmit={this.handleSubmit}>
             <h2 variant="primary">Filtres</h2>
           <Card className="text-center">
-          <CardHeader>Date</CardHeader>
+          <CardHeader title="Date"/>
           
             <CardContent> 
             
@@ -271,7 +271,7 @@ export default class FormGeipan extends Component{
             </Card>
             <br/>
           <Card className="text-center">
-          <CardHeader>Localisation</CardHeader>
+          <CardHeader title="Localisation"/>
           <CardContent>
             <FormControl >
 
@@ -293,7 +293,7 @@ export default class FormGeipan extends Component{
           </Card>
 
           <Card className="text-center">
-          <CardHeader>Classe</CardHeader>
+          <CardHeader title="Classe"/>
           <CardContent>
           <Select
               multiple

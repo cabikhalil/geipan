@@ -28,7 +28,7 @@ export default class Observation extends Component {
 
     getCasFromServer(form) {
       console.log(form)
-      let url = 'http://localhost:8080/api/cases?' + (form)
+      let url = 'http://localhost:8080/api/filteredcases?' + (form)
         fetch(url, {
             method: 'get',
         })
