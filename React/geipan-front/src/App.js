@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import './components/Table.js';
-import Form from './components/Form.js';
+import Form from './components/FormGeipan.js';
 import Details from './components/Details.js';
 import TableCas from './components/TableCas.js';
 import DetailsTemoignage from './components/DetailsTemoignage.js';

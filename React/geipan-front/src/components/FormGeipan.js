@@ -1,18 +1,19 @@
-import { FormControl,TextField,Checkbox, InputLabel, Select,MenuItem, FormHelperText,Button } from '@material-ui/core';
+import { FormControl,TextField,Checkbox, InputLabel, Select,MenuItem, FormHelperText } from '@material-ui/core';
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Form,Button,Badge,Container,Row,Col,Card } from 'react-bootstrap';
 
-export default class Form extends Component{
+export default class FormGeipan extends Component{
 
     constructor(props) {
         super(props);
         this.state= {
-            localisation: [],
-            classe: [],
+            localisation: ['Martinique'],
+            classe: ['A'],
             startDate : new Date(),
             endDate : new Date()  
     };
@@ -26,8 +27,8 @@ export default class Form extends Component{
     handleSubmit(e) {
         e.preventDefault();
         const filters = {
-            localisation:[],
-            classe: [],
+            localisation:this.state.localisation,
+            classe: this.state.classe,
             startDate: this.state.startDate || "",
             endDate : this.state.endDate || ""
         };
@@ -57,7 +58,7 @@ export default class Form extends Component{
         if (filters.classe.length!== 0){
             if (params !== "") params += "&"
             params += "cas_classification=";
-            filters.classe.forEach(el =>
+            Array.prototype.forEach.call(filters.classe,el =>
                 params += el + ","
                 )
                 params.slice(0,-1);
@@ -69,7 +70,7 @@ export default class Form extends Component{
         if (filters.localisation.length!== 0){
             if (params !== "") params += "&"
             params += "cas_zone_nom=";
-            filters.localisation.forEach(el =>
+            Array.prototype.forEach.call(filters.localisation,el =>
                 params += el + ","
                 )
                 params.slice(0,-1);
@@ -238,73 +239,77 @@ export default class Form extends Component{
     
         //const { cases : {classe, localisation, dateStart, dateEnd}} = this.state.cases;
         return(
-        
-        <form onSubmit={this.handleSubmit}>
-        <Grid container> 
-        <Grid item xs={6}> 
-        <Paper> Du :
-        <DatePicker
-        selected={this.state.startDate}
-        onChange={date => this.handleChangeStartDate(date)}
-        selectsStart
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-      /> </Paper>
-        
-      </Grid>
-      <Grid item xs={6}> 
-      <Paper> au : 
-          <br/>
-        <DatePicker
-        selected={this.state.endDate}
-        onChange={date => this.handleChangeEndDate(date)}
-        selectsEnd
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-        minDate={this.state.startDate}
-      /></Paper>
-      
-      </Grid>
-      </Grid>
-        <br/>
-        <Grid container>
-        <Grid item xs={12}>  
-        <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-name-label" >Localisation</InputLabel>
-        <Select
-          multiple
-          value={this.state.localisation}
-          onChange={this.handleChangeLocalisation}
-        >
-          {localisations.map((localisation) => (
-            <MenuItem key={localisation} value={localisation}>
-              {localisation}
-            </MenuItem>
-          ))}
-        </Select>
-        </FormControl>
-        </Grid>
+          <Form onSubmit={this.handleSubmit}>
+            <h2 variant="primary">Filtres</h2>
+          <Card className="text-center">
+          <Card.Header>Date</Card.Header>
+          <Card.Body>
+            <Container> 
+            <Row>
+            <Col>
+              <Paper> Du 
+              <DatePicker
+              selected={this.state.startDate}
+              onChange={date => this.handleChangeStartDate(date)}
+              selectsStart
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
+            /> </Paper>
+              
+            </Col>
+            <Col>
+            <Paper> Au  
+                <br/>
+              <DatePicker
+              selected={this.state.endDate}
+              onChange={date => this.handleChangeEndDate(date)}
+              selectsEnd
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
+              minDate={this.state.startDate}
+            /></Paper>
+            
+            </Col>
+            </Row>
+            </Container>
+            </Card.Body>
+            </Card>
             <br/>
-        <Grid item xs={12}> 
-        <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label">Classe</InputLabel>
-            <Select
-                multiple
-                value={this.state.classe}
-                onChange={this.handleChangeClasse}
-            >
-                {classes.map((classe) => (
-            <MenuItem key={classe} value={classe}>
+          <Card className="text-center">
+          <Card.Header>Localisation</Card.Header>
+          <Card.Body>
+          <Form.Group controlId="exampleForm.SelectCustomSizeSm">
+            <Form.Control as="select" size="sm" custom onChange={this.handleChangeLocalisation} value={this.state.localisation}>
+            {localisations.map((localisation) => (
+            <option key={localisation} value={localisation}>
+              {localisation}
+            </option>
+            ))}
+            </Form.Control>
+          </Form.Group>
+          </Card.Body>
+          </Card>
+
+          <Card className="text-center">
+          <Card.Header>Classe</Card.Header>
+          <Card.Body>
+          <Form.Group controlId="exampleForm.SelectCustomSizeLg">
+            <Form.Control as="select" size="lg" custom value={this.state.classe} onChange={this.handleChangeClasse}>
+            {classes.map((classe) => (
+            <option key={classe} value={classe}>
               {classe}
-            </MenuItem>
-          ))}
-            </Select>
-      </FormControl>
-      </Grid>
-      </Grid>
-      <br/>
-      <Button type="submit">Submit</Button>
-        </form>
+            </option>
+            ))}
+            </Form.Control>
+          </Form.Group>
+          </Card.Body>
+          </Card>
+          <br/>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+        
         )
     }
 

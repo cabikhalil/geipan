@@ -49,11 +49,11 @@ exports.findCaseById = function(id, callback) {
         	// La requete mongoDB
 
             let myquery = { "id_cas": parseInt(id)};
-			console.log(id);
+			console.log("id: " + id);
             db.collection("cas_pub") 
             .findOne(myquery, function(err, data) {
 				let reponse;
-				console.log(data);
+				console.log("data: " + data);
 
                 if(!err){
                     reponse = {

@@ -10,6 +10,7 @@ import Clear from '@material-ui/icons/Clear'
 import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
+import queryString from 'query-string';
 
 
 
@@ -25,8 +26,10 @@ export default class Observation extends Component {
     
 
 
-    getCasFromServer() {
-        fetch('http://localhost:8080/api/cases', {
+    getCasFromServer(form) {
+        console.log(form);
+        //fetch('http://localhost:8080/api/cases/'+form{
+        fetch('http://localhost:8080/api/cases/', {
             method: 'get',
         })
             .then(response => {
@@ -35,6 +38,7 @@ export default class Observation extends Component {
 
         .then(res => {  
           let newCas = [];
+          console.log(this.props.match.params.params);
           console.log(res);
           res.data.forEach((el) => {
             newCas.push(el);
@@ -119,7 +123,7 @@ export default class Observation extends Component {
        
     }
     componentDidMount() {
-        this.getCasFromServer()
+      this.getCasFromServer(JSON.stringify(queryString.parse(this.props.match.params.params)))
     }
 
     render() {

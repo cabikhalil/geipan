@@ -79,7 +79,7 @@ app.get('/api/connection', function(req, res) {
 // page = no de la page
 // Oui, on va faire de la pagination, pour afficher
 // par exemple les cases 10 par 10
-app.get('/api/cases', function(req, res) { 
+app.get('/api/cases', function(req, res) {
 	// Si présent on prend la valeur du param, sinon 1
     let page = parseInt(req.query.page || 1);
     // idem si present on prend la valeur, sinon 10
