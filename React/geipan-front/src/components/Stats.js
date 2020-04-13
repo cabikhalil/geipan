@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+/* import React, { PureComponent } from 'react';
 import {
   PieChart, Pie, Sector, Cell,
 } from 'recharts';
@@ -49,3 +49,4 @@ export default class Example extends React.Component {
     );
   }
 }
+ */

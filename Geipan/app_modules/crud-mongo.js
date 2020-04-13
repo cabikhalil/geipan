@@ -19,7 +19,7 @@ exports.connexionMongo = function(callback) {
 	});
 }
 
-exports.findCases = function(form,page, pagesize, callback) {
+exports.findFilteredCases = function(form,page, pagesize, callback) {
     MongoClient.connect(url, function(err, client) {
     	    console.log("pagesize = " + pagesize);
 			console.log("page = " + page);
@@ -82,6 +82,28 @@ exports.findCases = function(form,page, pagesize, callback) {
 			//.find(finalquery)
             //.skip(page*pagesize)
            // .limit(pagesize)
+            .toArray()
+            .then(arr => callback(arr));
+        }
+        else{
+            callback(-1);
+        }
+    });
+};
+
+exports.findCases = function(page, pagesize, callback) {
+    MongoClient.connect(url, function(err, client) {
+    	    console.log("pagesize = " + pagesize);
+			console.log("page = " + pagesize);
+			
+			var db = client.db(dbName);
+
+			console.log("db " + db)
+        if(!err){
+			db.collection('cas_pub')
+			.find()
+            .skip(page*pagesize)
+            .limit(pagesize)
             .toArray()
             .then(arr => callback(arr));
         }

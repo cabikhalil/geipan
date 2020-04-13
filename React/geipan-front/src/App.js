@@ -13,12 +13,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-      <Nav/>
+    
       <header className="App-header">
        
         <Switch>
           <Route path="/" exact component={Form}></Route>
-          <Route path="/cas/stats" exact component={Stats}></Route>
           <Route path="/filteredcas/:params" exact component={TableCas}></Route>
           <Route path="/cas/details/:_id" exact component={Details}></Route>
           <Route path="/cas/details/temoignage/:id_temoignage" exact component={DetailsTemoignage}></Route>

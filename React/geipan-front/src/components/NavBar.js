@@ -1,4 +1,4 @@
-import React from 'react'
+/* import React from 'react'
 import {Link} from 'react-router-dom';
 import {AppBar, Tabs, Tab, Toolbar} from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
@@ -36,3 +36,4 @@ export default class Nav extends React.Component {
   }
 }
 
+ */
