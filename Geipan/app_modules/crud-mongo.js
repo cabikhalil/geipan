@@ -120,7 +120,7 @@ exports.findCases = function(page, pagesize, callback) {
 			db.collection('cas_pub')
 			.find()
             .skip(page*pagesize)
-            .limit(pagesize)
+            //.limit(pagesize)
             .toArray()
             .then(arr => {
 				db.collection('cas_pub')
