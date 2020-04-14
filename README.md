@@ -11,10 +11,10 @@ Dans un premier temps il a fallu importer les données du geipan dans une base d
 
 ### 2) Partie serveur
 
-Le backend se trouve dans le dossier Geipan, pour l'exécuter il vous faut entrer la commande suivante dans un terminal :
+Le backend se trouve dans le dossier Geipan, pour l'exécuter il vous faut entrer la commande suivante dans un terminal (se placer dans le dossier Geipan avant) :
 > nodemon serverCrudWithMongo.js
 
 ### 3) Partie React App
 
-Elle se trouve dans le dossier React, pour la lancer il vous faut entrer la commande suivante :
+Elle se trouve dans le dossier React, pour la lancer il vous faut entrer la commande suivante (se placer dans React/geipan-front/) :
 > npm start 
