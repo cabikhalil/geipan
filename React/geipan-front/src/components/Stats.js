@@ -155,7 +155,7 @@ export default class Example extends React.Component {
     
     return (
       
-      <PieChart width={500} height={500}>
+      <PieChart width={400} height={400}>
         <Pie
           activeIndex={this.state.activeIndex}
           activeShape={renderActiveShape}
