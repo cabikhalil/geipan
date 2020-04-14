@@ -81,7 +81,7 @@ app.get('/api/connection', function (req, res) {
 // par exemple les cases 10 par 10
 app.get('/api/filteredcases', function (req, res) {
 	// Si présent on prend la valeur du param, sinon 1
-	let page = parseInt(req.query.page || 1);
+	let page = parseInt(req.query.page || 0);
 	// idem si present on prend la valeur, sinon 10
 	let pagesize = parseInt(req.query.pagesize || 10);
 	console.log("*****");
@@ -134,7 +134,7 @@ mongoDBModule.findFilteredCases(form, page, pagesize, function (data) {
 ///////////////////////////cases////////////////////////
  app.get('/api/cases', function(req, res) { 
 	// Si présent on prend la valeur du param, sinon 1
-    let page = parseInt(req.query.page || 1);
+    let page = parseInt(req.query.page || 0);
     // idem si present on prend la valeur, sinon 10
     let pagesize = parseInt(req.query.pagesize || 10);
 
@@ -197,7 +197,7 @@ app.delete('/api/cases/:id', function (req, res) {
 ///////////////////////////testimonials////////////////////////
 app.get('/api/testimonials', function (req, res) {
 	// Si présent on prend la valeur du param, sinon 1
-	let page = parseInt(req.query.page || 1);
+	let page = parseInt(req.query.page || 0);
 	// idem si present on prend la valeur, sinon 10
 	let pagesize = parseInt(req.query.pagesize || 10);
 
