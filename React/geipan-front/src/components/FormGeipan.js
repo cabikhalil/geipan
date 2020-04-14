@@ -12,8 +12,8 @@ export default class FormGeipan extends Component{
     constructor(props) {
         super(props);
         this.state= {
-            localisation: ['Martinique'],
-            classe: ['A'],
+            localisation: ['Haute-Vienne'],
+            classe: ['C'],
             startDate : new Date(),
             endDate : new Date()  
     };

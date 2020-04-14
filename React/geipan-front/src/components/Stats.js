@@ -1,4 +1,4 @@
-/* import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import {
   PieChart, Pie, Sector, Cell,
 } from 'recharts';
@@ -33,13 +33,15 @@ export default class Example extends React.Component {
             this.setState({
               case: newCas
             });
-            this.renderDataTable()
           })
   
           .catch(err => {
             console.log("Erreur dans le get: " + err)
           });
       }
+componentDidMount(){
+  this.getCasFromServer()
+}
 
   render() {
     return (
@@ -49,4 +51,4 @@ export default class Example extends React.Component {
     );
   }
 }
- */
+ 

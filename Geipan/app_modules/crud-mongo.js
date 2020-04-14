@@ -30,16 +30,21 @@ exports.findFilteredCases = function(form,page, pagesize, callback) {
 		if (form.cas_classification == "A"){
 			console.log("Classe A")
 		}
+		console.log("****************************NEW QUERY************************************")
 		let finalquery = {};
 		if(form.cas_classification !== undefined) {
-			if (JSON.stringify(form.cas_classification).length>1){
+			console.log("Longueur CAS_CLASSIFICATION ="+form.cas_classification.length)
+			if (form.cas_classification.length>1){
 				let cas_classif= form.cas_classification.split(',');
 				let queryClasse = ""
 				queryClasse = cas_classif.length == 0?{$exist:true}:{$in:cas_classif};
-				 finalquery["cas_classification"]=queryClasse;
+				
+				console.log("Query zone : " + JSON.stringify(queryClasse))
+				finalquery["cas_classification"]=queryClasse;
 				
 			} else {
 				finalquery["cas_classification"]=form.cas_classification;
+				console.log("Final query in classe " + JSON.stringify(finalquery));
 			}
 		}
 		
@@ -48,10 +53,14 @@ exports.findFilteredCases = function(form,page, pagesize, callback) {
 				let cas_zone= form.cas_zone_nom.split(',');
 				let queryZone = ""
 				queryZone = cas_zone.length == 0?{$exist:true}:{$in:cas_zone};
+				//queryZone = {$in:cas_zone}
+				console.log("Query zone : " + JSON.stringify(queryZone))
 				finalquery["cas_zone_nom"]=queryZone;
 				
 			} else {
 				finalquery["cas_zone_nom"]=form.cas_zone_nom;
+				console.log("form cas zone nom : " + JSON.stringify(form.cas_zone_nom))
+				console.log("Final query in zone " + JSON.stringify(finalquery))
 			}
 		}
 
@@ -60,30 +69,38 @@ exports.findFilteredCases = function(form,page, pagesize, callback) {
 			let queryDatePeriod = ""
 			queryDatePeriod = (form.cas_date_end.length == 0 && form.cas_date_start.length == 0) ?{$exist:true}:{$gte:form.cas_date_start, $lte : form.cas_date_end};
 			finalquery["dateCas"]=queryDatePeriod;
+			console.log("Query DatePeriod: "+JSON.stringify(queryDatePeriod))
 			
-		} else if (form.cas_date_start !== undefined) {
+		} else if (form.cas_date_start !== undefined && form.cas_date_end== undefined ) {
 			
 			let queryDateStart = ""
 			queryDateStart = (form.cas_date_start.length == 0) ?{$exist:true}:{$gte:form.cas_date_start};
 			finalquery["dateCas"]=queryDateStart;
+			console.log("Query DateStart : "+JSON.stringify(queryDateStart))
 			
-		} else if (form.cas_date_end !== undefined) {
+		} else if (form.cas_date_end !== undefined && form.cas_date_start == undefined) {
 			
 			let queryDateEnd = ""
 			queryDateEnd = (form.cas_date_end.length == 0) ?{$exist:true}:{$lte:form.cas_date_end};
 			finalquery["dateCas"]=queryDateEnd;
+			console.log("Query DateEnd"+JSON.stringify(queryDateEnd))
 		}
+		console.log ("FINAL QUERY BEFORE AGGREGATE : "+ JSON.stringify(finalquery))
 		
         if(!err){
 			db.collection('cas_pub').aggregate(
-				[{$addFields: { dateCas : {$dateFromParts: { 'year' : {$convert:{input: "$cas_AAAA", to:"int", onError:1900}} , 'month' : {$convert:{input: "$cas_MM", to:"int", onError:01}}, 'day': {$convert:{input: "$cas_JJ", to:"int", onError:01}} }}}}, { $match : finalquery }, {$skip:page*pagesize} ]
+				[{$addFields: { dateCas : {$dateFromParts: { 'year' : {$convert:{input: "$cas_AAAA", to:"int", onError:2005}} , 'month' : {$convert:{input: "$cas_MM", to:"int", onError:01}}, 'day': {$convert:{input: "$cas_JJ", to:"int", onError:01}} }}}}, { $match : finalquery }, {$skip:page*pagesize} ]
 			)
 			//db.collection('cas_pub')
 			//.find(finalquery)
             //.skip(page*pagesize)
            // .limit(pagesize)
             .toArray()
-            .then(arr => callback(arr));
+			.then(arr =>
+				{console.log("Array aggregate :");
+				console.log(arr.length);
+				callback(arr)}
+				);
         }
         else{
             callback(-1);
@@ -105,7 +122,11 @@ exports.findCases = function(page, pagesize, callback) {
             .skip(page*pagesize)
             .limit(pagesize)
             .toArray()
-            .then(arr => callback(arr));
+            .then(arr => {
+				db.collection('cas_pub')
+				.count()
+				.then(rep => callback(arr,rep))
+			});
         }
         else{
             callback(-1);
