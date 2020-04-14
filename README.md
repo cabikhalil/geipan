@@ -17,4 +17,5 @@ Le backend se trouve dans le dossier Geipan, pour l'exécuter il vous faut entre
 ### 3) Partie React App
 
 Elle se trouve dans le dossier React, pour la lancer il vous faut entrer la commande suivante (se placer dans React/geipan-front/) :
+> npm install
 > npm start 
