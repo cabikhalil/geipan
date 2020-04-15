@@ -20,3 +20,5 @@ Elle se trouve dans le dossier React, pour la lancer il vous faut entrer la comm
 > npm install
 
 > npm start 
+
+A savoir: Le component Stats.js a été largement inspiré de l'example "CustomActiveShapePieCharts" de la libraire recharts utilisée (http://recharts.org/en-US/examples/CustomActiveShapePieChart).
